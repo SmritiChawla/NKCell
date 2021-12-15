@@ -1,6 +1,6 @@
-setwd("D:\\NK_breast_cancer\\FInal_codes_13_04_2020")
-suppressPackageStartupMessages(library(limma))
-suppressPackageStartupMessages(library(edgeR))
+##loading libraries
+library(limma)
+library(edgeR)
 
 
 data <- read.csv("Breast_cancer_run1_with_gene_names_intact.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1)
@@ -41,17 +41,12 @@ expression_matrix1 = expression_matrix1[exprs_Genes,pos]
 
 meta2 = read.table("Run2_cell_metadata_15062020.csv",sep=",",header=T,stringsAsFactors = F,row.names = 1,check.names = F,strip.white = T)
 rownames(meta2) = gsub('(.*)_\\w+', '\\1',rownames(meta2))
-
 mt2 = meta2[colnames(expression_matrix1),]
 pos = which(mt2[,6]==0)
-
 mt2 = mt2[-pos,]
 expression_matrix1 = expression_matrix1[,-pos]
-
-
-
-colnames(mt1) =c("A","B","C","D","E","F")
-colnames(mt2) =c("A","B","C","D","E","F")
+colnames(mt1) = c("chip","Run","Selection","Tumor","NK","Final")
+colnames(mt2) = c("chip","Run","Selection","Tumor","NK","Final")
 labels = rbind((mt1),(mt2))
 
 exp <- cbind( expression_matrix[ intersect(rownames(expression_matrix), rownames(expression_matrix1)), ] ,
@@ -59,7 +54,7 @@ exp <- cbind( expression_matrix[ intersect(rownames(expression_matrix), rownames
 
 meta = labels[colnames(exp),]
 
-cell_metadata = as.matrix(paste(meta$C,meta$F,sep="_"))
+cell_metadata = as.matrix(paste(meta$Selection,meta$Final,sep="_"))
 rownames(cell_metadata) = rownames(meta)
 colnames(cell_metadata) = "Cell_labels"
 
@@ -70,6 +65,7 @@ exp = exp[,-pos]
 nk_killing = read.table("NK_killing_16062020.txt",sep="\t",header = F)
 touching = read.table("touching_16062020.txt",sep="\t",header = F)
 nt = read.table("not_touching_16062020.txt",sep="\t",header = F)
+
 
 data1 = exp[,which(colnames(exp) %in% nk_killing[,1])]
 data2 = exp[,which(colnames(exp) %in% touching[,1])]
@@ -84,7 +80,6 @@ mm <- model.matrix(~0 + group)
 y <- voom(d0, mm, plot = T)
 fit <- lmFit(y, mm)
 head(coef(fit))
-
 contrast.matrix <- makeContrasts(
   KN = groupNK_Killing - groupNot_killing,
   levels = colnames(coef(fit))

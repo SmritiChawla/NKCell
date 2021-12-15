@@ -55,7 +55,7 @@ rownames(m1) = rownames(m1)
 pos1 = which(m1[,1]=="TU-NK_TU")
 mt1 = mt1[-pos1,]
 expression_matrix = expression_matrix[,-pos1]
-m2 = as.matrix(paste(mt2$C,mt2$F,sep="_"))
+m2 = as.matrix(paste(mt2$Selection,mt2$Final,sep="_"))
 rownames(m2) = rownames(m2)
 pos2 = which(m2[,1]=="TU-NK_TU")
 mt2 = mt2[-pos2,]
