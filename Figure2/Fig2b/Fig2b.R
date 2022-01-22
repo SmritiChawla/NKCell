@@ -125,7 +125,7 @@ idx <- apply(abs(cor) > threshold, 1, any)
 correlate= cor[idx, ]
 p=pheatmap(correlate,fontsize_row = 4.3,cluster_rows = T,fontsize_col = 8,show_colnames = T,cluster_cols = F,angle_col = 45)
 
-scv=data.frame((cutree(p$tree_row, k=4)))
+cv=data.frame((cutree(p$tree_row, k=4)))
 colnames(cv) = "Module"
 cv = as.matrix(cv)
 cv[cv[,1]==1] = "Module1"
