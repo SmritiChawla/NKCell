@@ -73,16 +73,19 @@ colnames(mt2) = c("Chip","Run", "Selection.step" ,"Final.decision")
 
 labels = rbind(mt1,mt2)
 lb = labels[colnames(exp),]
-p1 = which(lb$Final.decision=="TU")
+lb$Final = paste(lb$Selection.step,lb$Final.decision,sep="/")
+
+
+p1 = which(lb$Final=="TU/TU")
 p1a = lb[p1,]
-p2 = which(lb$Final.decision=="NK")
+p2 = which(lb$Final=="NK/NK")
 p2a = lb[p2,]
 
 data1 = exp[,which(colnames(exp) %in% rownames(p1a))]
 data2 = exp[,which(colnames(exp) %in% rownames(p2a))]
 
 counts = cbind(data1,data2)
-group = c(rep("TU",71),rep("NK",87))
+group = c(rep("TU",71),rep("NK",77))
 d0 <- DGEList(counts)
 d0 <- calcNormFactors(d0)
 mm <- model.matrix(~0 + group)
