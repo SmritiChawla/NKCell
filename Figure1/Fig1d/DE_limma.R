@@ -2,7 +2,7 @@
 library(limma)
 library(edgeR)
 
-
+##Processing single cell data 1
 data <- read.csv("Breast_cancer_run1.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1)
 expression_matrix = as.matrix(data[,5:ncol(data)])
 gnames = as.matrix(data[,1])
@@ -20,9 +20,9 @@ pos1 = which(rownames(expression_matrix) %in% genes[,1])
 expression_matrix = as.matrix(expression_matrix[pos1,])
 exprs_Genes = apply(expression_matrix, 1, function(x) sum(x > 5)) >= 10
 pos = which(colSums(expression_matrix)>2000)
-
 expression_matrix = expression_matrix[exprs_Genes,pos]
 
+##Processing single cell data 2
 data1 <- read.csv("Breast_cancer_run2.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1,strip.white=T)
 expression_matrix1 = as.matrix(data1[,5:ncol(data1)])
 gnames1 = as.matrix(data1[,1])
@@ -35,7 +35,6 @@ pos1 = which(rownames(expression_matrix1) %in% genes[,1])
 expression_matrix1 = as.matrix(expression_matrix1[pos1,])
 exprs_Genes = apply(expression_matrix1, 1, function(x) sum(x > 5)) >= 10
 pos = which(colSums(expression_matrix1)>2000)
-
 expression_matrix1 = expression_matrix1[exprs_Genes,pos]
 
 
@@ -62,6 +61,8 @@ pos = which(cell_metadata[,1]=="TU-NK_TU")
 cell_metadata = as.matrix(cell_metadata[-pos,])
 exp = exp[,-pos]
 
+
+##Running limma
 nk_killing = read.table("NK_killing_16062020.txt",sep="\t",header = F)
 touching = read.table("touching_16062020.txt",sep="\t",header = F)
 nt = read.table("not_touching_16062020.txt",sep="\t",header = F)

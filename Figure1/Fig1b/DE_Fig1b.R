@@ -23,7 +23,6 @@ pos = which(colSums(expression_matrix)>2000)
 expression_matrix = expression_matrix[exprs_Genes,pos]
 
 ##Processing single cell gene expression data from run2
-
 data1 <- read.csv("Breast_cancer_run2.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1,strip.white=T)
 expression_matrix1 = as.matrix(data1[,5:ncol(data1)])
 gnames1 = as.matrix(data1[,1])
@@ -84,6 +83,8 @@ p2a = lb[p2,]
 data1 = exp[,which(colnames(exp) %in% rownames(p1a))]
 data2 = exp[,which(colnames(exp) %in% rownames(p2a))]
 
+
+##Running limma
 counts = cbind(data1,data2)
 group = c(rep("TU",71),rep("NK",77))
 d0 <- DGEList(counts)

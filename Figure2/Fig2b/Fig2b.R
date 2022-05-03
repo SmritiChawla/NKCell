@@ -67,19 +67,19 @@ expression_matrix1 = expression_matrix1[,-pos2]
 
 
 #Breast_cancer_run1
-ctrl <- CreateSeuratObject(expression_matrix, project = "Breast_cancer_run_1", min.cells = 5)
-ctrl@meta.data$stim <- "CTRL"
+df1 <- CreateSeuratObject(expression_matrix, project = "Breast_cancer_run_1", min.cells = 5)
+df1@meta.data$stim <- "Run1"
 
 
 #Breast_cancer_run2
-stim <- CreateSeuratObject(expression_matrix1, project = "Breast_cancer_run_2", min.cells = 5)
-stim@meta.data$stim <- "STIM"
+df2 <- CreateSeuratObject(expression_matrix1, project = "Breast_cancer_run_2", min.cells = 5)
+df2@meta.data$stim <- "Run2"
 
 
 objects = list()
 
-objects[[1]] = ctrl
-objects[[2]] = stim
+objects[[1]] = df1
+objects[[2]] = df2
 
 for (i in 1:length(objects)) {
   objects[[i]] <- NormalizeData(objects[[i]], verbose = FALSE)
@@ -87,22 +87,25 @@ for (i in 1:length(objects)) {
                                        verbose = FALSE)
 }
 
-immune.anchors <- FindIntegrationAnchors(object.list = objects, dims = 1:30,k.filter = 100)
-immune.combined <- IntegrateData(anchorset = immune.anchors, dims = 1:30)
+anchors <- FindIntegrationAnchors(object.list = objects, dims = 1:30,k.filter = 100)
+combined <- IntegrateData(anchorset = anchors, dims = 1:30)
 
 
 
-DefaultAssay(immune.combined) <- "integrated"
+DefaultAssay(combined) <- "integrated"
 
-# Run the standard workflow for visualization and clustering
-immune.combined <- ScaleData(immune.combined, verbose = FALSE)
-immune.combined <- RunPCA(immune.combined, npcs = 30, verbose = FALSE)
-# t-SNE and Clustering
-immune.combined <- RunUMAP(immune.combined, reduction = "pca", dims = 1:30)
-immune.combined <- FindNeighbors(immune.combined, reduction = "pca", dims = 1:30)
-immune.combined <- FindClusters(immune.combined, resolution = 0.5)
 
-exp = as.matrix(immune.combined@assays$integrated@data)
+#Visualization and Clustering
+
+combined <- ScaleData(combined, verbose = FALSE)
+combined <- RunPCA(combined, npcs = 30, verbose = FALSE)
+
+
+combined <- RunUMAP(combined, reduction = "pca", dims = 1:30)
+combined <- FindNeighbors(combined, reduction = "pca", dims = 1:30)
+combined <- FindClusters(combined, resolution = 0.5)
+
+exp = as.matrix(combined@assays$integrated@data)
 
 
 
