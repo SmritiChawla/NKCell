@@ -3,14 +3,14 @@ library(limma)
 library(edgeR)
 
 
-data <- read.csv("Breast_cancer_run1_with_gene_names_intact.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1)
+data <- read.csv("Breast_cancer_run1.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1)
 expression_matrix = as.matrix(data[,5:ncol(data)])
 gnames = as.matrix(data[,1])
 rownames(expression_matrix) = gnames
 expression_matrix = expression_matrix[which(rowSums(expression_matrix)>0),]
 expression_matrix = expression_matrix[,-c(63,68,96)]
 colnames(expression_matrix) = gsub('(.*)_\\w+', '\\1',colnames(expression_matrix))
-meta1 = read.csv("Run1_cell_metadata_15062020.csv",sep=",",header=T,stringsAsFactors = F,row.names = 1,check.names = F,strip.white = T)
+meta1 = read.csv("Run1_cell_metadata.csv",sep=",",header=T,stringsAsFactors = F,row.names = 1,check.names = F,strip.white = T)
 mt1 = meta1[colnames(expression_matrix),]
 pos = which(mt1[,6]==0)
 mt1 = mt1[-pos,]
@@ -23,7 +23,7 @@ pos = which(colSums(expression_matrix)>2000)
 
 expression_matrix = expression_matrix[exprs_Genes,pos]
 
-data1 <- read.csv("Breast_cancer_run_2_genes_intact.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1,strip.white=T)
+data1 <- read.csv("Breast_cancer_run2.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1,strip.white=T)
 expression_matrix1 = as.matrix(data1[,5:ncol(data1)])
 gnames1 = as.matrix(data1[,1])
 rownames(expression_matrix1) = gnames1
@@ -39,7 +39,7 @@ pos = which(colSums(expression_matrix1)>2000)
 expression_matrix1 = expression_matrix1[exprs_Genes,pos]
 
 
-meta2 = read.table("Run2_cell_metadata_15062020.csv",sep=",",header=T,stringsAsFactors = F,row.names = 1,check.names = F,strip.white = T)
+meta2 = read.table("Run2_cell_metadata.csv",sep=",",header=T,stringsAsFactors = F,row.names = 1,check.names = F,strip.white = T)
 rownames(meta2) = gsub('(.*)_\\w+', '\\1',rownames(meta2))
 mt2 = meta2[colnames(expression_matrix1),]
 pos = which(mt2[,6]==0)
