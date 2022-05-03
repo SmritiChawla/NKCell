@@ -1,6 +1,6 @@
 library(igraph)
 library(networkD3)
-mod2 = read.table("Module2.csv",sep=",",header=T,stringsAsFactors = F)
+mod2 = read.table("Module1.csv",sep=",",header=T,stringsAsFactors = F)
 p <- simpleNetwork(mod2)
 
 g <- graph.data.frame(d = mod2, directed = FALSE)
