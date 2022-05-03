@@ -72,10 +72,6 @@ meta = labels[colnames(exp),]
 cell_metadata = as.matrix(paste(meta$Selection,meta$Final,sep="_"))
 rownames(cell_metadata) = rownames(meta)
 colnames(cell_metadata) = "Cell_labels"
-
-
-
-
 exp = data.frame(exp)
 exp = log2(exp+1)
 ex = cbind.data.frame((t(exp)),cell_metadata)
