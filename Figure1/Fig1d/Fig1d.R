@@ -56,7 +56,7 @@ meta = labels[colnames(exp),]
 cell_metadata = as.matrix(paste(meta$Selection,meta$Final,sep="_"))
 rownames(cell_metadata) = rownames(meta)
 colnames(cell_metadata) = "Cell_labels"
-pos = which(cell_metadata[,1]=="TU-NK_TU")
+pos = which(cell_metadata[,1]=="Cancer-NK_Cancer")
 cell_metadata = as.matrix(cell_metadata[-pos,])
 exp = exp[,-pos]
 

@@ -2,6 +2,7 @@
 library(readxl)
 library(scatterD3)
 
+##load data
 excel_sheets("Run1_Run2_intensity_file.xlsx")
 master1<-read_excel("Run1_Run2_intensity_file.xlsx", sheet=1)
 master2<-read_excel("Run1_Run2_intensity_file.xlsx", sheet=2)
@@ -10,7 +11,7 @@ master4<-read_excel("Run1_Run2_intensity_file.xlsx", sheet=4)
 master5<-read_excel("Run1_Run2_intensity_file.xlsx", sheet=5)
 master6<-read_excel("Run1_Run2_intensity_file.xlsx", sheet=6)
 master7<-read_excel("Run1_Run2_intensity_file.xlsx", sheet=7)
-View(head(master1))
+
 master1[,c(2,3)]<-scale(master1[,c(2,3)])
 master2[,c(2,3)]<-scale(master2[,c(2,3)])
 master3[,c(2,3)]<-scale(master3[,c(2,3)])
@@ -22,7 +23,6 @@ master7[,c(2,3)]<-scale(master7[,c(2,3)])
 final_list <- rbind(master1,master2,master3,master4,master5,master6,master7)
 
 colnames(final_list) = c("cells","NK","Tumor","Annotation","Final.Annotation")
-
 labels = paste(final_list$Annotation,final_list$Final.Annotation,sep="/")
 pos1 = which(labels=="0/0")
 pos2= which(labels=="NK/0")

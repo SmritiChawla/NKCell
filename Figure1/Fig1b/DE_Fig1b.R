@@ -48,13 +48,13 @@ colnames(mt1) =c("chip","Run","Selection","Tumor","NK","Final")
 colnames(mt2) =c("chip","Run","Selection","Tumor","NK","Final")
 m1 = as.matrix(paste(mt1$Selection,mt1$Final,sep="_"))
 rownames(m1) = rownames(m1)
-pos1 = which(m1[,1]=="TU-NK_TU")
+pos1 = which(m1[,1]=="Cancer-NK_Cancer")
 mt1 = mt1[-pos1,]
 
 expression_matrix = expression_matrix[,-pos1]
 m2 = as.matrix(paste(mt2$Selection,mt2$Final,sep="_"))
 rownames(m2) = rownames(m2)
-pos2 = which(m2[,1]=="TU-NK_TU")
+pos2 = which(m2[,1]=="Cancer-NK_Cancer")
 mt2 = mt2[-pos2,]
 expression_matrix1 = expression_matrix1[,-pos2]
 
@@ -72,7 +72,7 @@ lb = labels[colnames(exp),]
 lb$Final = paste(lb$Selection.step,lb$Final.decision,sep="/")
 
 ###Subsetting single Tumor and single NK cells                    
-p1 = which(lb$Final=="TU/TU")
+p1 = which(lb$Final=="Cancer/Cancer")
 p1a = lb[p1,]
 p2 = which(lb$Final=="NK/NK")
 p2a = lb[p2,]

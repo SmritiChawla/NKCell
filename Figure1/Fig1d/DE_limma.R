@@ -56,14 +56,14 @@ meta = labels[colnames(exp),]
 cell_metadata = as.matrix(paste(meta$Selection,meta$Final,sep="_"))
 rownames(cell_metadata) = rownames(meta)
 colnames(cell_metadata) = "Cell_labels"
-pos = which(cell_metadata[,1]=="TU-NK_TU")
+pos = which(cell_metadata[,1]=="Cancer-NK_Cancer")
 cell_metadata = as.matrix(cell_metadata[-pos,])
 exp = exp[,-pos]
 
 ##Running limma
-nk_killing = read.table("NK_killing_16062020.txt",sep="\t",header = F)
-touching = read.table("touching_16062020.txt",sep="\t",header = F)
-nt = read.table("not_touching_16062020.txt",sep="\t",header = F)
+nk_killing = read.table("NK_killing.txt",sep="\t",header = F)
+touching = read.table("Touching.txt",sep="\t",header = F)
+nt = read.table("Not_touching.txt",sep="\t",header = F)
 data1 = exp[,which(colnames(exp) %in% nk_killing[,1])]
 data2 = exp[,which(colnames(exp) %in% touching[,1])]
 data3 = exp[,which(colnames(exp) %in% nt[,1])]

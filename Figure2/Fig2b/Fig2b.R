@@ -49,12 +49,12 @@ colnames(mt2) = c("chip","Run","Selection","Tumor","NK","Final")
 
 m1 = as.matrix(paste(mt1$Selection,mt1$Final,sep="_"))
 rownames(m1) = rownames(m1)
-pos1 = which(m1[,1]=="TU-NK_TU")
+pos1 = which(m1[,1]=="Cancer-NK_Cancer")
 expression_matrix = expression_matrix[,-pos1]
 
 m2 = as.matrix(paste(mt2$Selection,mt2$Final,sep="_"))
 rownames(m2) = rownames(m2)
-pos2 = which(m2[,1]=="TU-NK_TU")
+pos2 = which(m2[,1]=="Cancer-NK_Cancer")
 expression_matrix1 = expression_matrix1[,-pos2]
 
 ###Running Seurat pipeline

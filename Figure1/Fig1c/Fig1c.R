@@ -51,14 +51,14 @@ expression_matrix1 = expression_matrix1[,-pos]
 
 colnames(mt1) =c("chip","Run","Selection","Tumor","NK","Final")
 colnames(mt2) =c("chip","Run","Selection","Tumor","NK","Final")
-m1 = as.matrix(paste(mt1$Selection,mt1$Final,sep="_"))
+m1 = as.matrix(paste(mt1$Selection,mt1$Final,sep="/"))
 rownames(m1) = rownames(m1)
-pos1 = which(m1[,1]=="TU-NK_TU")
+pos1 = which(m1[,1]=="Cancer-NK/Cancer")
 mt1 = mt1[-pos1,]
 expression_matrix = expression_matrix[,-pos1]
-m2 = as.matrix(paste(mt2$Selection,mt2$Final,sep="_"))
+m2 = as.matrix(paste(mt2$Selection,mt2$Final,sep="/"))
 rownames(m2) = rownames(m2)
-pos2 = which(m2[,1]=="TU-NK_TU")
+pos2 = which(m2[,1]=="Cancer-NK/Cancer")
 mt2 = mt2[-pos2,]
 expression_matrix1 = expression_matrix1[,-pos2]
 
@@ -110,10 +110,9 @@ lb = labels[rownames(um),]
 final_labels = paste(lb$Selection.step,lb$Final.decision,sep="/")
 data = cbind.data.frame(um[,1],um[,2],final_labels)
 colnames(data) = c("UMAP1","UMAP2","CellType")
-n=brewer.pal(n = 4, name = "Set1")
 g=ggscatter(data, x = "UMAP1", y = "UMAP2",
-          color = "CellType", palette = n,legend="right",size=2.5) 
-g+guides(color = guide_legend(override.aes = list(size=2.5)))
+          color = "CellType",legend="right",size=2.5) 
+g+guides(color = guide_legend(override.aes = list(size=2.5)))+scale_color_manual(values=c(c("NK/NK"="#E41A1C","Cancer-NK/NK"="#377EB8","Cancer-NK/Cancer-NK"="#4DAF4A","Cancer/Cancer"="#984EA3")))
 
 
 ##PCA based visualization of cluster 1
@@ -126,16 +125,15 @@ pos = which(colnames(exp) %in% cl[,1])
 exp = log2(exp+1)
 ex = exp[,pos]
 lb = meta[colnames(ex),]
-cell_metadata = as.matrix(paste(lb$Selection.step,lb$Final.decision,sep="_"))
+cell_metadata = as.matrix(paste(lb$Selection.step,lb$Final.decision,sep="/"))
 
 ###PCA
 pc = prcomp(ex)
 data = cbind.data.frame(pc$rotation[,1:2],cell_metadata)
 colnames(data) = c("PC1","PC2","labels")
-n=brewer.pal(n = 4, name = "Set1")
 g=ggscatter(data, x = "PC1", y = "PC2",
-            color = "labels", palette = n,legend="right",size=3) 
-g+guides(color = guide_legend(override.aes = list(size=5))) + theme(axis.title=element_text(size=30),axis.text.x = element_text(size = 30),axis.text.y = element_text(size = 30))
+            color = "labels",legend="right",size=3) 
+g+guides(color = guide_legend(override.aes = list(size=5))) + theme(axis.title=element_text(size=30),axis.text.x = element_text(size = 30),axis.text.y = element_text(size = 30))+scale_color_manual(values=c(c("NK/NK"="#E41A1C","Cancer-NK/NK"="#377EB8","Cancer-NK/Cancer-NK"="#4DAF4A","Cancer/Cancer"="#984EA3")))
 
 
 

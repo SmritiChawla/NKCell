@@ -46,22 +46,22 @@ expression_matrix1 = expression_matrix1[,-pos]
 
 colnames(mt1) = c("chip","Run","Selection","Tumor","NK","Final")
 colnames(mt2) = c("chip","Run","Selection","Tumor","NK","Final")
-m1 = as.matrix(paste(mt1$Selection,mt1$Final,sep="_"))
+m1 = as.matrix(paste(mt1$Selection,mt1$Final,sep="/"))
 rownames(m1) = rownames(m1)
-pos1 = which(m1[,1]=="TU-NK_TU")
+pos1 = which(m1[,1]=="Cancer-NK/Cancer")
 mt1 = mt1[-pos1,]
 
 expression_matrix = expression_matrix[,-pos1]
-m2 = as.matrix(paste(mt2$Selection,mt2$Final,sep="_"))
+m2 = as.matrix(paste(mt2$Selection,mt2$Final,sep="/"))
 rownames(m2) = rownames(m2)
-pos2 = which(m2[,1]=="TU-NK_TU")
+pos2 = which(m2[,1]=="Cancer-NK/Cancer")
 mt2 = mt2[-pos2,]
 expression_matrix1 = expression_matrix1[,-pos2]
 exp <- cbind( expression_matrix[ intersect(rownames(expression_matrix), rownames(expression_matrix1)), ] ,
               expression_matrix1[ intersect(rownames(expression_matrix), rownames(expression_matrix1)), ])
 labels = rbind(mt1,mt2)
 meta = labels[colnames(exp),]
-cell_metadata = as.matrix(paste(meta$Selection,meta$Final,sep="_"))
+cell_metadata = as.matrix(paste(meta$Selection,meta$Final,sep="/"))
 rownames(cell_metadata) = rownames(meta)
 colnames(cell_metadata) = "Cell_labels"
 exp = data.frame(exp)
@@ -69,34 +69,77 @@ exp = log2(exp+1)
 ex = cbind.data.frame((t(exp)),cell_metadata)
 colnames(ex)[8908] = "cell_type" 
 
-##Computing correlation for three ligand pairs Ligand/Protein pairs
+##Computing correlation for three Ligand/Protein pairs
+
+##ANXA1/EGFR
 ex1 = ex[,c("ANXA1","EGFR","cell_type")]
-#ex1 = ex[,c("HSP90AA1","EGFR","cell_type")]
-#ex1 = ex[,c("CD24","SIGLEC10","cell_type")]
 
 ##Subsetting different cells
-pos = which(ex1[,3]=="NK_NK")
+pos = which(ex1[,3]=="NK/NK")
 nk = ex1[pos,-3]
 cor1 = cor(nk)
 
-pos = which(ex1[,3]=="TU-NK_TU-NK")
+pos = which(ex1[,3]=="Cancer-NK/Cancer-NK")
 db = ex1[pos,-3]
 cor2 = cor(db)
 
-pos = which(ex1[,3]=="TU_TU")
+pos = which(ex1[,3]=="Cancer/Cancer")
 Tu = ex1[pos,-3]
 cor3 = cor(Tu)
 
-pos = which(ex1[,3]=="TU-NK_NK")
+pos = which(ex1[,3]=="Cancer-NK/NK")
 tunk = ex1[pos,-3]
 cor4 = cor(tunk)
 
-##Data preparation
-c1 = data.frame(CellType=c("NK_NK", "TU-NK_TU-NK", "TU_TU","TU-NK_NK"), 
+c1 = data.frame(CellType=c("NK/NK", "Cancer-NK/Cancer-NK", "Cancer/Cancer","Cancer-NK/NK"), 
                 ANXA1_EGFR=c(cor1[1,2],cor2[1,2],cor3[1,2], cor4[1,2]) )
-c2 <- data.frame(CellType=c("NK_NK", "TU-NK_TU-NK", "TU_TU","TU-NK_NK"), 
+
+
+##HSP90AA1/EGFR
+ex1 = ex[,c("HSP90AA1","EGFR","cell_type")]
+
+##Subsetting different cells
+pos = which(ex1[,3]=="NK/NK")
+nk = ex1[pos,-3]
+cor1 = cor(nk)
+
+pos = which(ex1[,3]=="Cancer-NK/Cancer-NK")
+db = ex1[pos,-3]
+cor2 = cor(db)
+
+pos = which(ex1[,3]=="Cancer/Cancer")
+Tu = ex1[pos,-3]
+cor3 = cor(Tu)
+
+pos = which(ex1[,3]=="Cancer-NK/NK")
+tunk = ex1[pos,-3]
+cor4 = cor(tunk)
+
+
+c2 <- data.frame(CellType=c("NK/NK", "Cancer-NK/Cancer-NK", "Cancer/Cancer","Cancer-NK/NK"), 
                  HSP90AA1_EGFR=c(cor1[1,2],cor2[1,2],cor3[1,2], cor4[1,2]) )
-c3 <- data.frame(CellType=c("NK_NK", "TU-NK_TU-NK", "TU_TU","TU-NK_NK"), 
+
+
+###CD24/SIGLEC10
+ex1 = ex[,c("CD24","SIGLEC10","cell_type")]
+
+##Subsetting different cells
+pos = which(ex1[,3]=="NK/NK")
+nk = ex1[pos,-3]
+cor1 = cor(nk)
+
+pos = which(ex1[,3]=="Cancer-NK/Cancer-NK")
+db = ex1[pos,-3]
+cor2 = cor(db)
+
+pos = which(ex1[,3]=="Cancer/Cancer")
+Tu = ex1[pos,-3]
+cor3 = cor(Tu)
+
+pos = which(ex1[,3]=="Cancer-NK/NK")
+tunk = ex1[pos,-3]
+cor4 = cor(tunk)
+c3 <- data.frame(CellType=c("NK/NK", "Cancer-NK/Cancer-NK", "Cancer/Cancer","Cancer-NK/NK"), 
                  CD24_SIGLEC10=c(cor1[1,2],cor2[1,2],cor3[1,2], cor4[1,2]) )
 
 final = cbind.data.frame(c1,c2,c3)
@@ -106,5 +149,5 @@ final = final[,-c(3,5)]
 df_long <- reshape2::melt(final)
 ggplot(df_long, aes(variable, value, fill = CellType)) + 
   geom_bar(stat="identity", position = "dodge",width = 0.5) + 
-  scale_fill_brewer(palette = "Set1") +theme_classic() + theme(axis.title=element_text(size=10),axis.text.x = element_text(size =10,hjust=1),axis.text.y = element_text(size = 10)) +theme(legend.position="right")  +  theme(legend.text=element_text(size=10))
+  scale_fill_manual(values=c(c("NK/NK"="#E41A1C","Cancer-NK/NK"="#377EB8","Cancer-NK/Cancer-NK"="#4DAF4A","Cancer/Cancer"="#984EA3")))+theme_classic(base_size = 20) + theme(axis.title=element_text(size=10),axis.text.x = element_text(size =10,hjust=1),axis.text.y = element_text(size = 10)) +theme(legend.position="right")  +  theme(legend.text=element_text(size=10))+ylab("Correlation")
 
