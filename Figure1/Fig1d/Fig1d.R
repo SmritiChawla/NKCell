@@ -23,7 +23,6 @@ exprs_Genes = apply(expression_matrix, 1, function(x) sum(x > 5)) >= 10
 pos = which(colSums(expression_matrix)>2000)
 expression_matrix = expression_matrix[exprs_Genes,pos]
 
-
 ##Processing single cell data 2
 data1 <- read.csv("Breast_cancer_run2.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1,strip.white=T)
 expression_matrix1 = as.matrix(data1[,5:ncol(data1)])
@@ -44,14 +43,11 @@ mt2 = meta2[colnames(expression_matrix1),]
 pos = which(mt2[,6]==0)
 mt2 = mt2[-pos,]
 expression_matrix1 = expression_matrix1[,-pos]
-
-
 colnames(mt1) = c("chip","Run","Selection","Tumor","NK","Final")
 colnames(mt2) = c("chip","Run","Selection","Tumor","NK","Final")
-
 labels = rbind((mt1),(mt2))
 
-##Merging single cell data 1 and data 2
+##Merging two runs
 exp <- cbind( expression_matrix[ intersect(rownames(expression_matrix), rownames(expression_matrix1)), ] ,
               expression_matrix1[ intersect(rownames(expression_matrix), rownames(expression_matrix1)), ])
 
@@ -60,7 +56,6 @@ meta = labels[colnames(exp),]
 cell_metadata = as.matrix(paste(meta$Selection,meta$Final,sep="_"))
 rownames(cell_metadata) = rownames(meta)
 colnames(cell_metadata) = "Cell_labels"
-
 pos = which(cell_metadata[,1]=="TU-NK_TU")
 cell_metadata = as.matrix(cell_metadata[-pos,])
 exp = exp[,-pos]
@@ -69,16 +64,11 @@ exp = exp[,-pos]
 nk_killing = read.table("NK_killing.txt",sep="\t",header = F)
 touching = read.table("Touching.txt",sep="\t",header = F)
 nt = read.table("Not_touching.txt",sep="\t",header = F)
-
 data1 = exp[,which(colnames(exp) %in% nk_killing[,1])]
 data2 = exp[,which(colnames(exp) %in% touching[,1])]
 data3 = exp[,which(colnames(exp) %in% nt[,1])]
-
 counts = cbind(data1,data2,data3)
 group = c(rep("NK_Killing",10),rep("Not_killing",106))
-
-
-
 exp = data.frame(counts)
 exp = log2(exp+1)
 ex = cbind.data.frame((t(exp)),group)
