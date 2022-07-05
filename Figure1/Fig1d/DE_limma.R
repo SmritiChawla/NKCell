@@ -48,31 +48,25 @@ colnames(mt1) = c("chip","Run","Selection","Tumor","NK","Final")
 colnames(mt2) = c("chip","Run","Selection","Tumor","NK","Final")
 labels = rbind((mt1),(mt2))
 
+### Merging two runs
 exp <- cbind( expression_matrix[ intersect(rownames(expression_matrix), rownames(expression_matrix1)), ] ,
               expression_matrix1[ intersect(rownames(expression_matrix), rownames(expression_matrix1)), ])
 
 meta = labels[colnames(exp),]
-
 cell_metadata = as.matrix(paste(meta$Selection,meta$Final,sep="_"))
 rownames(cell_metadata) = rownames(meta)
 colnames(cell_metadata) = "Cell_labels"
-
 pos = which(cell_metadata[,1]=="TU-NK_TU")
 cell_metadata = as.matrix(cell_metadata[-pos,])
 exp = exp[,-pos]
-
 
 ##Running limma
 nk_killing = read.table("NK_killing_16062020.txt",sep="\t",header = F)
 touching = read.table("touching_16062020.txt",sep="\t",header = F)
 nt = read.table("not_touching_16062020.txt",sep="\t",header = F)
-
-
 data1 = exp[,which(colnames(exp) %in% nk_killing[,1])]
 data2 = exp[,which(colnames(exp) %in% touching[,1])]
 data3 = exp[,which(colnames(exp) %in% nt[,1])]
-
-
 counts = cbind(data1,data2,data3)
 group = c(rep("NK_Killing",10),rep("Not_killing",106))
 d0 <- DGEList(counts)
