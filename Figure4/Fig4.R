@@ -145,8 +145,10 @@ c3 <- data.frame(CellType=c("NK/NK", "Cancer-NK/Cancer-NK", "Cancer/Cancer","Can
 final = cbind.data.frame(c1,c2,c3)
 final = final[,-c(3,5)]
 
+
 ##Plotting barplots               
 df_long <- reshape2::melt(final)
+df_long$CellType = factor(df_long$CellType,levels=c("NK/NK","Cancer-NK/NK","Cancer-NK/Cancer-NK", "Cancer/Cancer"))
 ggplot(df_long, aes(variable, value, fill = CellType)) + 
   geom_bar(stat="identity", position = "dodge",width = 0.5) + 
   scale_fill_manual(values=c(c("NK/NK"="#E41A1C","Cancer-NK/NK"="#377EB8","Cancer-NK/Cancer-NK"="#4DAF4A","Cancer/Cancer"="#984EA3")))+theme_classic(base_size = 20) + theme(axis.title=element_text(size=10),axis.text.x = element_text(size =10,hjust=1),axis.text.y = element_text(size = 10)) +theme(legend.position="right")  +  theme(legend.text=element_text(size=10))+ylab("Correlation")
