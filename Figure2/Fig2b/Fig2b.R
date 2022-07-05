@@ -42,12 +42,10 @@ meta2 = read.table("Run2_cell_metadata.csv",sep=",",header=T,stringsAsFactors = 
 rownames(meta2) = gsub('(.*)_\\w+', '\\1',rownames(meta2))
 mt2 = meta2[colnames(expression_matrix1),]
 pos = which(mt2[,6]==0)
-
 mt2 = mt2[-pos,]
 expression_matrix1 = expression_matrix1[,-pos]
 colnames(mt1) = c("chip","Run","Selection","Tumor","NK","Final")
 colnames(mt2) = c("chip","Run","Selection","Tumor","NK","Final")
-labels = rbind((mt1),(mt2))
 
 m1 = as.matrix(paste(mt1$Selection,mt1$Final,sep="_"))
 rownames(m1) = rownames(m1)
@@ -82,7 +80,7 @@ anchors <- FindIntegrationAnchors(object.list = objects, dims = 1:30,k.filter = 
 combined <- IntegrateData(anchorset = anchors, dims = 1:30)
 DefaultAssay(combined) <- "integrated"
 
-#Visualization and Clustering
+###Visualization and Clustering
 combined <- ScaleData(combined, verbose = FALSE)
 combined <- RunPCA(combined, npcs = 30, verbose = FALSE)
 combined <- RunUMAP(combined, reduction = "pca", dims = 1:30)
