@@ -58,23 +58,20 @@ pos2 = which(m2[,1]=="TU-NK_TU")
 mt2 = mt2[-pos2,]
 expression_matrix1 = expression_matrix1[,-pos2]
 
+###Combining two runs                  
 exp <- cbind( expression_matrix[ intersect(rownames(expression_matrix), rownames(expression_matrix1)), ] ,
               expression_matrix1[ intersect(rownames(expression_matrix), rownames(expression_matrix1)), ])
 
-
-
+###Metadata preparation                 
 mt1 = mt1[,-c(4,5)]
 colnames(mt1) = c("Chip","Run", "Selection.step" ,"Final.decision")
-
 mt2 = mt2[,-c(4,5)]
 colnames(mt2) = c("Chip","Run", "Selection.step" ,"Final.decision")
-
-
 labels = rbind(mt1,mt2)
 lb = labels[colnames(exp),]
 lb$Final = paste(lb$Selection.step,lb$Final.decision,sep="/")
 
-
+###Subsetting single Tumor and single NK cells                    
 p1 = which(lb$Final=="TU/TU")
 p1a = lb[p1,]
 p2 = which(lb$Final=="NK/NK")
@@ -82,7 +79,6 @@ p2a = lb[p2,]
 
 data1 = exp[,which(colnames(exp) %in% rownames(p1a))]
 data2 = exp[,which(colnames(exp) %in% rownames(p2a))]
-
 
 ##Running limma
 counts = cbind(data1,data2)
