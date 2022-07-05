@@ -4,7 +4,8 @@ library(cowplot)
 library(ggplot2)
 library(RColorBrewer)
 library(ggpubr)
-
+library(RColorBrewer)
+library(ggpubr)
 
 ##Processing single cell gene expression data from run1 
 data <- read.csv("Breast_cancer_run1.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1)
@@ -61,18 +62,17 @@ pos2 = which(m2[,1]=="TU-NK_TU")
 mt2 = mt2[-pos2,]
 expression_matrix1 = expression_matrix1[,-pos2]
 
-
+###Running Seurat pipeline
+                    
 #Breast_cancer_run1
 df1 <- CreateSeuratObject(expression_matrix, project = "Breast_cancer_run_1", min.cells = 5)
 df1@meta.data$stim<- "Run1"
 
-
-#Breast_cancer_run2
+                    #Breast_cancer_run2
 df2 <- CreateSeuratObject(expression_matrix1, project = "Breast_cancer_run_2", min.cells = 5)
 df2@meta.data$stim <- "Run2"
 set.seed(100)
 objects = list()
-
 
 ##Integrating Run1 & Run2
 objects[[1]] = df1
@@ -86,9 +86,6 @@ for (i in 1:length(objects)) {
 
 anchors <- FindIntegrationAnchors(object.list = objects, dims = 1:30,k.filter = 100)
 combined <- IntegrateData(anchorset = anchors, dims = 1:30)
-
-
-
 DefaultAssay(combined) <- "integrated"
 
 #Visualization and Clustering
@@ -99,9 +96,6 @@ combined <- RunUMAP(combined, reduction = "pca", dims = 1:30)
 combined <- FindNeighbors(combined, reduction = "pca", dims = 1:30)
 combined <- FindClusters(combined, resolution = 0.5)
 
-
-
-# Visualization
 set.seed(100)
 p1 <- DimPlot(combined, reduction = "umap", group.by = "stim")
 p2 <- DimPlot(combined, reduction = "umap", label = TRUE)
@@ -116,15 +110,10 @@ lb = labels[rownames(um),]
 final_labels = paste(lb$Selection.step,lb$Final.decision,sep="/")
 data = cbind.data.frame(um[,1],um[,2],final_labels)
 colnames(data) = c("UMAP1","UMAP2","CellType")
-
-
 n=brewer.pal(n = 4, name = "Set1")
-
 g=ggscatter(data, x = "UMAP1", y = "UMAP2",
           color = "CellType", palette = n,legend="right",size=2.5) 
 g+guides(color = guide_legend(override.aes = list(size=2.5)))
-
-
 
 
 ##PCA based visualization of cluster 1
@@ -132,29 +121,18 @@ exp <- cbind( expression_matrix[ intersect(rownames(expression_matrix), rownames
               expression_matrix1[ intersect(rownames(expression_matrix), rownames(expression_matrix1)), ])
 meta = labels[colnames(exp),]
 
-
 cl = read.table("cluster1.csv",sep=",",header=T,stringsAsFactors = F,row.names=1)
 pos = which(colnames(exp) %in% cl[,1])
-
 exp = log2(exp+1)
 ex = exp[,pos]
-
 lb = meta[colnames(ex),]
 cell_metadata = as.matrix(paste(lb$Selection.step,lb$Final.decision,sep="_"))
 
 ###PCA
-
 pc = prcomp(ex)
-
 data = cbind.data.frame(pc$rotation[,1:2],cell_metadata)
 colnames(data) = c("PC1","PC2","labels")
-
-
-
-library(RColorBrewer)
 n=brewer.pal(n = 4, name = "Set1")
-
-library(ggpubr)
 g=ggscatter(data, x = "PC1", y = "PC2",
             color = "labels", palette = n,legend="right",size=3) 
 g+guides(color = guide_legend(override.aes = list(size=5))) + theme(axis.title=element_text(size=30),axis.text.x = element_text(size = 30),axis.text.y = element_text(size = 30))
