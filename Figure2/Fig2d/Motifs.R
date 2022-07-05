@@ -27,14 +27,5 @@ motifEnrichmentTable_wGenes <- addSignificantGenes(motifEnrichmentTable,
                                                    rankings=motifRankings, 
                                                    nCores=1,
                                                    method="aprox")
-
-
-
-
 motifEnrichmentTable_wGenes_wLogo <- addLogo(motifEnrichmentTable_wGenes)
-resultsSubset <- motifEnrichmentTable_wGenes_wLogo
 
-datatable(resultsSubset[,-c("enrichedGenes", "TF_lowConf"), with=FALSE], 
-          escape = FALSE, # To show the logo
-          filter="top", options=list(pageLength=5))
-signifMotifNames <- motifEnrichmentTable$motif[1:20]
