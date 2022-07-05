@@ -35,16 +35,12 @@ pos1 = which(rownames(expression_matrix1) %in% genes[,1])
 expression_matrix1 = as.matrix(expression_matrix1[pos1,])
 exprs_Genes = apply(expression_matrix1, 1, function(x) sum(x > 5)) >= 10
 pos = which(colSums(expression_matrix1)>2000)
-
 expression_matrix1 = expression_matrix1[exprs_Genes,pos]
-
-
 meta2 = read.table("Run2_cell_metadata.csv",sep=",",header=T,stringsAsFactors = F,row.names = 1,check.names = F,strip.white = T)
 rownames(meta2) = gsub('(.*)_\\w+', '\\1',rownames(meta2))
 
 mt2 = meta2[colnames(expression_matrix1),]
 pos = which(mt2[,6]==0)
-
 mt2 = mt2[-pos,]
 expression_matrix1 = expression_matrix1[,-pos]
 
@@ -56,19 +52,15 @@ pos1 = which(m1[,1]=="TU-NK_TU")
 mt1 = mt1[-pos1,]
 
 expression_matrix = expression_matrix[,-pos1]
-
 m2 = as.matrix(paste(mt2$Selection,mt2$Final,sep="_"))
 rownames(m2) = rownames(m2)
 pos2 = which(m2[,1]=="TU-NK_TU")
 mt2 = mt2[-pos2,]
 expression_matrix1 = expression_matrix1[,-pos2]
-
 exp <- cbind( expression_matrix[ intersect(rownames(expression_matrix), rownames(expression_matrix1)), ] ,
               expression_matrix1[ intersect(rownames(expression_matrix), rownames(expression_matrix1)), ])
 labels = rbind(mt1,mt2)
 meta = labels[colnames(exp),]
-
-
 cell_metadata = as.matrix(paste(meta$Selection,meta$Final,sep="_"))
 rownames(cell_metadata) = rownames(meta)
 colnames(cell_metadata) = "Cell_labels"
@@ -82,7 +74,7 @@ ex1 = ex[,c("ANXA1","EGFR","cell_type")]
 #ex1 = ex[,c("HSP90AA1","EGFR","cell_type")]
 #ex1 = ex[,c("CD24","SIGLEC10","cell_type")]
 
-
+##Subsetting different cells
 pos = which(ex1[,3]=="NK_NK")
 nk = ex1[pos,-3]
 cor1 = cor(nk)
@@ -95,31 +87,23 @@ pos = which(ex1[,3]=="TU_TU")
 Tu = ex1[pos,-3]
 cor3 = cor(Tu)
 
-
 pos = which(ex1[,3]=="TU-NK_NK")
 tunk = ex1[pos,-3]
 cor4 = cor(tunk)
 
-
-
+##Data preparation
 c1 = data.frame(CellType=c("NK_NK", "TU-NK_TU-NK", "TU_TU","TU-NK_NK"), 
                 ANXA1_EGFR=c(cor1[1,2],cor2[1,2],cor3[1,2], cor4[1,2]) )
-
-
-c2 <- data.frame(CellType=c("NK_NK", "TU-NK_TU-NK", "TU_TU","TU-NK_NK"), 
-                 HSP90AA1_EGFR=c(cor1[1,2],cor2[1,2],cor3[1,2], cor4[1,2]) )
-
-c3 <- data.frame(CellType=c("NK_NK", "TU-NK_TU-NK", "TU_TU","TU-NK_NK"), 
-                 CD24_SIGLEC10=c(cor1[1,2],cor2[1,2],cor3[1,2], cor4[1,2]) )
-
-
+#c2 <- data.frame(CellType=c("NK_NK", "TU-NK_TU-NK", "TU_TU","TU-NK_NK"), 
+#                 HSP90AA1_EGFR=c(cor1[1,2],cor2[1,2],cor3[1,2], cor4[1,2]) )
+#c3 <- data.frame(CellType=c("NK_NK", "TU-NK_TU-NK", "TU_TU","TU-NK_NK"), 
+#                 CD24_SIGLEC10=c(cor1[1,2],cor2[1,2],cor3[1,2], cor4[1,2]) )
 
 final = cbind.data.frame(c1,c2,c3)
 final = final[,-c(3,5)]
 
+##Plotting barplots               
 df_long <- reshape2::melt(final)
-
-
 ggplot(df_long, aes(variable, value, fill = CellType)) + 
   geom_bar(stat="identity", position = "dodge",width = 0.5) + 
   scale_fill_brewer(palette = "Set1") +theme_classic() + theme(axis.title=element_text(size=10),axis.text.x = element_text(size =10,hjust=1),axis.text.y = element_text(size = 10)) +theme(legend.position="right")  +  theme(legend.text=element_text(size=10))
