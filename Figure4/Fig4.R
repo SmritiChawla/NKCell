@@ -69,7 +69,7 @@ exp = log2(exp+1)
 ex = cbind.data.frame((t(exp)),cell_metadata)
 colnames(ex)[8908] = "cell_type" 
 
-##Computing correlation for Ligand/Protein pairs
+##Computing correlation for three ligand pairs Ligand/Protein pairs
 ex1 = ex[,c("ANXA1","EGFR","cell_type")]
 #ex1 = ex[,c("HSP90AA1","EGFR","cell_type")]
 #ex1 = ex[,c("CD24","SIGLEC10","cell_type")]
@@ -94,10 +94,10 @@ cor4 = cor(tunk)
 ##Data preparation
 c1 = data.frame(CellType=c("NK_NK", "TU-NK_TU-NK", "TU_TU","TU-NK_NK"), 
                 ANXA1_EGFR=c(cor1[1,2],cor2[1,2],cor3[1,2], cor4[1,2]) )
-#c2 <- data.frame(CellType=c("NK_NK", "TU-NK_TU-NK", "TU_TU","TU-NK_NK"), 
-#                 HSP90AA1_EGFR=c(cor1[1,2],cor2[1,2],cor3[1,2], cor4[1,2]) )
-#c3 <- data.frame(CellType=c("NK_NK", "TU-NK_TU-NK", "TU_TU","TU-NK_NK"), 
-#                 CD24_SIGLEC10=c(cor1[1,2],cor2[1,2],cor3[1,2], cor4[1,2]) )
+c2 <- data.frame(CellType=c("NK_NK", "TU-NK_TU-NK", "TU_TU","TU-NK_NK"), 
+                 HSP90AA1_EGFR=c(cor1[1,2],cor2[1,2],cor3[1,2], cor4[1,2]) )
+c3 <- data.frame(CellType=c("NK_NK", "TU-NK_TU-NK", "TU_TU","TU-NK_NK"), 
+                 CD24_SIGLEC10=c(cor1[1,2],cor2[1,2],cor3[1,2], cor4[1,2]) )
 
 final = cbind.data.frame(c1,c2,c3)
 final = final[,-c(3,5)]
