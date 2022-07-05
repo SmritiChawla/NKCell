@@ -4,7 +4,6 @@ library(viridis)
 library(RColorBrewer)
 library(pheatmap)
 
-
 #####Processing single cell gene expression data from run1 
 data <- read.csv("Breast_cancer_run1.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1)
 expression_matrix = as.matrix(data[,5:ncol(data)])
@@ -24,7 +23,6 @@ expression_matrix = as.matrix(expression_matrix[pos1,])
 exprs_Genes = apply(expression_matrix, 1, function(x) sum(x > 5)) >= 10
 pos = which(colSums(expression_matrix)>2000)
 expression_matrix = expression_matrix[exprs_Genes,pos]
-
 
 #####Processing single cell gene expression data from run2
 data1 <- read.csv("Breast_cancer_run2.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1,strip.white=T)
@@ -80,11 +78,9 @@ for (i in 1:length(objects)) {
   objects[[i]] <- FindVariableFeatures(objects[[i]], selection.method = "vst", 
                                        verbose = FALSE)
 }
-
 anchors <- FindIntegrationAnchors(object.list = objects, dims = 1:30,k.filter = 100)
 combined <- IntegrateData(anchorset = anchors, dims = 1:30)
 DefaultAssay(combined) <- "integrated"
-
 
 #Visualization and Clustering
 combined <- ScaleData(combined, verbose = FALSE)
@@ -94,8 +90,6 @@ combined <- FindNeighbors(combined, reduction = "pca", dims = 1:30)
 combined <- FindClusters(combined, resolution = 0.5)
 exp = as.matrix(combined@assays$integrated@data)
 
-
-
 ###Computing correlation between gene expression profiles of doublets and distance of doublets
 dis = read.table("Run1_Run2_distance_info.csv",sep=",",header=T,stringsAsFactors = F,row.names = 1)
 rownames(dis)[72:113] = gsub('(.*)_\\w+', '\\1',rownames(dis)[72:113])
@@ -103,7 +97,6 @@ dis = dis[,3:ncol(dis)]
 pos = which(colnames(exp) %in% rownames(dis))
 exp = exp[,pos]
 dis <- dis[colnames(exp),,drop=FALSE]
-
 exp = as.matrix(t(exp))
 dis = as.matrix((dis))
 cor = cor(exp,dis,method="pearson")
