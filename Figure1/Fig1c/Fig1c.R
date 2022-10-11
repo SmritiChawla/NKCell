@@ -2,10 +2,8 @@
 library(Seurat)
 library(cowplot)
 library(ggplot2)
-library(RColorBrewer)
 library(ggpubr)
 library(RColorBrewer)
-library(ggpubr)
 
 ##Processing single cell gene expression data from run1 
 data <- read.csv("Breast_cancer_run1.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1)
