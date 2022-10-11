@@ -2,10 +2,8 @@
 library(Seurat)
 library(cowplot)
 library(ggplot2)
-library(RColorBrewer)
 library(ggpubr)
 library(RColorBrewer)
-library(ggpubr)
 
 ##Processing single cell gene expression data from run1 
 data <- read.csv("Breast_cancer_run1.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1)
@@ -49,7 +47,7 @@ pos = which(mt2[,6]==0)
 mt2 = mt2[-pos,]
 expression_matrix1 = expression_matrix1[,-pos]
 
-colnames(mt1) =c("chip","Run","Selection","Tumor","NK","Final")
+                    colnames(mt1) =c("chip","Run","Selection","Tumor","NK","Final")
 colnames(mt2) =c("chip","Run","Selection","Tumor","NK","Final")
 m1 = as.matrix(paste(mt1$Selection,mt1$Final,sep="/"))
 rownames(m1) = rownames(m1)
@@ -68,7 +66,7 @@ expression_matrix1 = expression_matrix1[,-pos2]
 df1 <- CreateSeuratObject(expression_matrix, project = "Breast_cancer_run_1", min.cells = 5)
 df1@meta.data$stim<- "Run1"
 
-                    #Breast_cancer_run2
+#Breast_cancer_run2
 df2 <- CreateSeuratObject(expression_matrix1, project = "Breast_cancer_run_2", min.cells = 5)
 df2@meta.data$stim <- "Run2"
 set.seed(100)
