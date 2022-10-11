@@ -1,5 +1,4 @@
 ##loading libraries
-library(tidyverse)
 library(ggplot2)
 
 ##Processing single cell gene expression data from run1
