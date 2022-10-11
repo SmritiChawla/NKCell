@@ -3,7 +3,6 @@ library(Seurat)
 library(cowplot)
 library(pheatmap)
 
-
 ##Processing single cell gene expression data from run1 
 data <- read.csv("Breast_cancer_run1.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1)
 expression_matrix = as.matrix(data[,5:ncol(data)])
@@ -38,14 +37,11 @@ expression_matrix1 = as.matrix(expression_matrix1[pos1,])
 exprs_Genes = apply(expression_matrix1, 1, function(x) sum(x > 5)) >= 10
 pos = which(colSums(expression_matrix1)>2000)
 expression_matrix1 = expression_matrix1[exprs_Genes,pos]
-
-
 meta2 = read.table("Run2_cell_metadata.csv",sep=",",header=T,stringsAsFactors = F,row.names = 1,check.names = F,strip.white = T)
 rownames(meta2) = gsub('(.*)_\\w+', '\\1',rownames(meta2))
 
 mt2 = meta2[colnames(expression_matrix1),]
 pos = which(mt2[,6]==0)
-
 mt2 = mt2[-pos,]
 expression_matrix1 = expression_matrix1[,-pos]
 
@@ -55,7 +51,6 @@ m1 = as.matrix(paste(mt1$Selection,mt1$Final,sep="/"))
 rownames(m1) = rownames(m1)
 pos1 = which(m1[,1]=="Cancer/Cancer")
 expression_matrix = expression_matrix[,pos1]
-
 m2 = as.matrix(paste(mt2$Selection,mt2$Final,sep="/"))
 rownames(m2) = rownames(m2)
 pos2 = which(m2[,1]=="Cancer/Cancer")
@@ -92,7 +87,6 @@ immune.combined <- RunPCA(immune.combined, npcs = 30, verbose = FALSE)
 immune.combined <- RunUMAP(immune.combined, reduction = "pca", dims = 1:30)
 immune.combined <- FindNeighbors(immune.combined, reduction = "pca", dims = 1:30)
 immune.combined <- FindClusters(immune.combined, resolution = 0.5)
-
 
 # Visualization
 set.seed(100)
