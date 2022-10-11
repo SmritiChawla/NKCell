@@ -120,7 +120,7 @@ ann_col = list(
 )
 q_colors =  15
 v_colors =  viridis(q_colors)
-                    
+
 ##Plotting heatmap
 pheatmap(correlate,fontsize_row = 4.2,cluster_rows = T,fontsize_col = 6,cellheight = 4,cellwidth = 10,show_colnames = T,cluster_cols = F,angle_col = 45,annotation_row = cv,annotation_colors = ann_col,color=colorRampPalette(v_colors)(100),fontsize = 8)
 
