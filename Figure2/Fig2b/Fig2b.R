@@ -67,7 +67,6 @@ df1@meta.data$stim <- "Run1"
 df2 <- CreateSeuratObject(expression_matrix1, project = "Breast_cancer_run_2", min.cells = 5)
 df2@meta.data$stim <- "Run2"
 
-
 objects = list()
 objects[[1]] = df1
 objects[[2]] = df2
