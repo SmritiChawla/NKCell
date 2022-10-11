@@ -2,7 +2,6 @@
 library(ggplot2)
 library(RColorBrewer)
 
-
 ##Processing single cell data 1
 data <- read.csv("Breast_cancer_run1.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1)
 expression_matrix = as.matrix(data[,5:ncol(data)])
