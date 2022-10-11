@@ -112,7 +112,7 @@ data = cbind.data.frame(um[,1],um[,2],final_labels)
 colnames(data) = c("UMAP1","UMAP2","CellType")
 g=ggscatter(data, x = "UMAP1", y = "UMAP2",
           color = "CellType",legend="right",size=2.5) 
-g+guides(color = guide_legend(override.aes = list(size=2.5)))+scale_color_manual(values=c(c("NK/NK"="#E41A1C","Cancer-NK/NK"="#377EB8","Cancer-NK/Cancer-NK"="#4DAF4A","Cancer/Cancer"="#984EA3")))
+g+guides(color = guide_legend(override.aes = list(size=2.5)))+scale_color_manual(values=c(c("NK/NK"="#E41A1C","Cancer-NK/NK"="#377EB8","Cancer-NK/Cancer-NK"="#FFD92F","Cancer/Cancer"="#984EA3")))
 
 
 ##PCA based visualization of cluster 1
@@ -133,7 +133,7 @@ data = cbind.data.frame(pc$rotation[,1:2],cell_metadata)
 colnames(data) = c("PC1","PC2","labels")
 g=ggscatter(data, x = "PC1", y = "PC2",
             color = "labels",legend="right",size=3) 
-g+guides(color = guide_legend(override.aes = list(size=5))) + theme(axis.title=element_text(size=30),axis.text.x = element_text(size = 30),axis.text.y = element_text(size = 30))+scale_color_manual(values=c(c("NK/NK"="#E41A1C","Cancer-NK/NK"="#377EB8","Cancer-NK/Cancer-NK"="#4DAF4A","Cancer/Cancer"="#984EA3")))
+g+guides(color = guide_legend(override.aes = list(size=5))) + theme(axis.title=element_text(size=30),axis.text.x = element_text(size = 30),axis.text.y = element_text(size = 30))+scale_color_manual(values=c(c("NK/NK"="#E41A1C","Cancer-NK/NK"="#377EB8","Cancer-NK/Cancer-NK"="#FFD92F","Cancer/Cancer"="#984EA3")))
 
 
 

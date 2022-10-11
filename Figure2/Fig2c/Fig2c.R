@@ -20,7 +20,7 @@ mat$Value = log2(mat$Value)
 
 #Plotting
 ggplot(mat, aes(x=group, y=Value,col=group)) + 
-  geom_boxplot() + theme_classic(base_size = 15) + scale_color_brewer(palette="Dark2")
+  geom_boxplot() + theme_classic(base_size = 15) + scale_color_brewer(palette="Dark2") +scale_color_manual(values=c("Red","blue"))
 
 ##Statistical test for significance
 t.test(log2(df1$Value),log2(df2$Value))
