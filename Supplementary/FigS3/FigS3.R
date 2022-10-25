@@ -4,7 +4,6 @@ library(pheatmap)
 ##Source function
 source("Limma.R")
 
-
 ##Processing single cell gene expression data from run1 
 data <- read.csv("Breast_cancer_run1.csv",sep=",",header = T,stringsAsFactors = F,row.names = 1)
 expression_matrix = as.matrix(data[,5:ncol(data)])
@@ -59,7 +58,6 @@ meta = labels[colnames(exp),]
 
 
 ##Load Cluster 1 and Cluster 2
-
 Cluster1 = read.csv("cluster1.csv",row.names = 1)
 Cluster2 = read.csv("cluster2.csv",row.names = 1)
 
